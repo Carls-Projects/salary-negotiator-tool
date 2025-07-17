@@ -1,0 +1,16 @@
+{
+  "name": "salary-negotiator-tool",
+  "version": "1.0.0",
+  "description": "AI-powered salary negotiation talking points generator.",
+  "main": "api/generate.js",
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "^0.11.0",
+    "dotenv": "^16.4.5"
+  }
+}
