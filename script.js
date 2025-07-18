@@ -33,7 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Basic validation for negotiation fields (non-salary priorities are optional)
         if (!offerDetails || !targetGoal || !justificationPoints || !negotiationContext) {
-            alert('Please fill in all the main text fields to generate talking points.');
+            // Using a custom message box instead of alert() for better UX
+            negotiationOutput.textContent = 'Please fill in all the main text fields to generate talking points.';
+            resultsDiv.classList.remove('hidden'); // Show results div to display the message
+            loadingSpinner.classList.add('hidden'); // Ensure spinner is hidden
             return;
         }
 
@@ -43,73 +46,38 @@ document.addEventListener('DOMContentLoaded', () => {
         negotiationOutput.textContent = ''; // Clear previous output
         copyToClipboardButton.classList.add('hidden'); // Hide copy button
 
-        try {// Inside script.js, within the generateButton.addEventListener('click', async () => { ... }
-try {
-    // Make an API call to your Vercel serverless function
-    const response = await fetch('/api/generate', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        // Send all the collected data from the form
-        body: JSON.stringify({
-            offerDetails,
-            targetGoal,
-            justificationPoints,
-            negotiationContext,
-            selectedPriorities // This sends your new checkbox data
-        }),
-    });
+        try {
+            // Make an API call to your Vercel serverless function
+            const response = await fetch('/api/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // Send all the collected data from the form
+                body: JSON.stringify({
+                    offerDetails,
+                    targetGoal,
+                    justificationPoints,
+                    negotiationContext,
+                    selectedPriorities // This sends your new checkbox data
+                }),
+            });
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
-    }
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+            }
 
-    const data = await response.json();
-    negotiationOutput.textContent = data.talkingPoints; // Display AI's generated points
+            const data = await response.json();
+            negotiationOutput.textContent = data.talkingPoints; // Display AI's generated points
 
-    resultsDiv.classList.remove('hidden'); // Show results div
-    copyToClipboardButton.classList.remove('hidden'); // Show copy button
-
-} catch (error) {
-    console.error('Error during generation:', error);
-    // Display a user-friendly error message
-    negotiationOutput.textContent = `Error generating talking points: ${error.message}. Please check your inputs and try again.`;
-    resultsDiv.classList.remove('hidden');
-} finally {
-    loadingSpinner.classList.add('hidden'); // Hide spinner
-}
-Here are some simulated talking points for your negotiation:
-
-**Opening:**
-"Thank you so much for the generous offer for the ${offerDetails.split(',')[0].trim()} role. I'm incredibly excited about the opportunity to join your team and contribute to [mention something specific about company/role if you have it, e.g., 'your innovative projects']."
-
-**Core Salary/Goal Justification:**
-"Based on my deep experience in [mention key skill from justification] and my recent achievement of [mention key achievement from justification, e.g., 'exceeding sales targets by 20%'], I believe a base salary of ${targetGoal.split(' ')[0].trim()} aligns more closely with my market value and the significant impact I can bring to this role."
-
-` + (selectedPriorities.length > 0 ? `
-**Non-Salary Priorities:**
-"Beyond base compensation, I'm also very interested in discussing ${selectedPriorities.join(', ')}. For instance, [choose one priority, e.g., 'more PTO'] would allow me to [explain benefit, e.g., 'return refreshed and highly productive'], which ultimately benefits the company as well."
-
-` : '') + `
-**Anticipating Objections & Responses:**
-* **If they mention budget:** "I understand budgets are tight, but considering my proven ability to [reiterate a key justification point], I'm confident that this investment would yield a strong ROI for your team."
-* **If they say 'standard package':** "I appreciate that, and I'm very happy with many aspects of the standard package. However, given [reiterate unique skill/value], I believe there's room to tailor the offer slightly to ensure I can hit the ground running with maximum motivation."
-
-**Confident Closing & Next Steps:**
-"I'm truly excited about this opportunity and committed to finding a mutually beneficial compensation package. What are your thoughts on this, and what are the next steps?"
-
-**Overall Tone Recommendation:** Aim for a **confident, collaborative, and enthusiastic** tone throughout the conversation. You're not making demands, but proposing a partnership.
-            `;
-
-            negotiationOutput.textContent = dummyOutput; // Set dummy output
             resultsDiv.classList.remove('hidden'); // Show results div
             copyToClipboardButton.classList.remove('hidden'); // Show copy button
 
         } catch (error) {
             console.error('Error during generation:', error);
-            negotiationOutput.textContent = 'Error generating talking points. Please try again.';
+            // Display a user-friendly error message
+            negotiationOutput.textContent = `Error generating talking points: ${error.message}. Please check your inputs and try again.`;
             resultsDiv.classList.remove('hidden');
         } finally {
             loadingSpinner.classList.add('hidden'); // Hide spinner
@@ -122,8 +90,19 @@ Here are some simulated talking points for your negotiation:
         tempTextArea.value = negotiationOutput.textContent;
         document.body.appendChild(tempTextArea);
         tempTextArea.select();
-        document.execCommand('copy'); // Note: execCommand is deprecated, but widely supported for now
-        document.body.removeChild(tempTextArea);
-        alert('Talking points copied to clipboard!');
+        // document.execCommand('copy') is deprecated but works in iframes
+        // navigator.clipboard.writeText() is the modern API but might be restricted in some iframe environments
+        try {
+            document.execCommand('copy');
+            // Using a custom message box instead of alert()
+            negotiationOutput.textContent = 'Talking points copied to clipboard!';
+            resultsDiv.classList.remove('hidden'); // Show results div to display the message
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+            negotiationOutput.textContent = 'Failed to copy text to clipboard. Please copy manually.';
+            resultsDiv.classList.remove('hidden');
+        } finally {
+            document.body.removeChild(tempTextArea);
+        }
     });
 });
