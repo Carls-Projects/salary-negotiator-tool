@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             loadingSpinner.classList.add('hidden'); // Hide spinner
         }
-    });
+    }); // This closes the generateButton.addEventListener
 
     copyToClipboardButton.addEventListener('click', () => {
         // Use a temporary textarea to copy formatted text including new lines
@@ -105,4 +105,4 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.removeChild(tempTextArea);
         }
     });
-});
+}); // This correctly closes the DOMContentLoaded event listener
