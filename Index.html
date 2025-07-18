@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Salary Negotiation Talking Points Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>AI Salary Negotiation Talking Points Generator</h1>
+        <p>Get personalized talking points to confidently negotiate your next offer or raise. 💪</p>
+
+        <div class="input-section">
+            <label for="offerDetails">1. Current Offer Details (e.g., "Software Engineer, $100k base, standard benefits"):</label>
+            <textarea id="offerDetails" rows="3" placeholder="e.g., 'Software Engineer at Company X, $100,000 base salary, 401k, health benefits.'"></textarea>
+        </div>
+
+        <div class="input-section">
+            <label for="targetGoal">2. Your Target / Negotiation Goal (e.g., "$115k base", "more PTO", "remote option"):</label>
+            <textarea id="targetGoal" rows="2" placeholder="e.g., '$115,000 base salary and 3 weeks PTO.'"></textarea>
+        </div>
+
+        <div class="input-section">
+            <label for="justificationPoints">3. Your Justification (achievements, market research, unique value - in bullet points):</label>
+            <textarea id="justificationPoints" rows="5" placeholder="- Exceeded sales targets by 20% in last role.&#10;- My specific skills are valued at $120k in this market.&#10;- I bring unique expertise in X relevant to your project Y."></textarea>
+        </div>
+
+        <div class="input-section">
+            <label for="negotiationContext">4. Negotiation Context (e.g., "New job offer", "Annual raise discussion"):</label>
+            <input type="text" id="negotiationContext" placeholder="e.g., 'New job offer' or 'Annual performance review for raise.'">
+        </div>
+
+        <div class="input-section">
+            <label>5. Your Top Non-Salary Priorities (Select up to 3):</label>
+            <div class="checkbox-group">
+                <input type="checkbox" id="priorityPTO" value="More Paid Time Off"> <label for="priorityPTO">More Paid Time Off (PTO)</label><br>
+                <input type="checkbox" id="priorityBonus" value="Signing Bonus"> <label for="priorityBonus">Signing Bonus</label><br>
+                <input type="checkbox" id="priorityEquity" value="Stock Options/Equity"> <label for="priorityEquity">Stock Options/Equity</label><br>
+                <input type="checkbox" id="priorityDev" value="Professional Development Budget"> <label for="priorityDev">Professional Development Budget</label><br>
+                <input type="checkbox" id="priorityFlex" value="Flexible Work Schedule"> <label for="priorityFlex">Flexible Work Schedule</label><br>
+                <input type="checkbox" id="priorityRemote" value="Remote Work Option"> <label for="priorityRemote">Remote Work Option</label><br>
+                <input type="checkbox" id="priorityWellness" value="Health & Wellness Stipend"> <label for="priorityWellness">Health & Wellness Stipend</label><br>
+            </div>
+        </div>
+
+        <button id="generateButton">Generate Talking Points</button>
+
+        <div id="results" class="hidden">
+            <h2>Your Negotiation Talking Points:</h2>
+            <div id="loadingSpinner" class="spinner hidden"></div>
+            <pre id="negotiationOutput"></pre>
+            <button id="copyToClipboard">Copy Points</button>
+        </div>
+
+        <div class="monetization-cta">
+            <p>Need more personalized coaching or a full negotiation strategy? <a href="https://yourwebsite.com/premium-services" id="monetizationLink" target="_blank">Learn more about our premium services!</a></p>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
